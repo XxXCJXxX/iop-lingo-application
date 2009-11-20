@@ -3,6 +3,11 @@
  */
 package upc.view;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
@@ -12,11 +17,13 @@ import org.jdesktop.application.SingleFrameApplication;
 public class LingoApplication extends SingleFrameApplication {
 
     static {
+
         try {
             System.loadLibrary("Lingj11");
+
         } catch (Exception e) {
-            System.out.println("Load Exception: " + e.toString());
             e.printStackTrace();
+
         }
     }
 
@@ -25,6 +32,13 @@ public class LingoApplication extends SingleFrameApplication {
      */
     @Override
     protected void startup() {
+        Properties prop = new Properties();
+        try {
+            prop.load(new FileInputStream(new File("base.ini")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         show(new LingoView(this));
     }
 

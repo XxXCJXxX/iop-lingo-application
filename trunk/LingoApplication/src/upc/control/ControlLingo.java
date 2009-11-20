@@ -15,7 +15,7 @@ public class ControlLingo {
      * @param logFile
      * @return
      */
-    public boolean excecuteLingoFile(String lingoFile, String resultFile, String logFile) {
+    public boolean executeLingoFile(String lingoFile, String resultFile, String logFile) {
         try {
             Object pnLngEnv = Lingd11.LScreateEnvLng();
             int nErr = Lingd11.LSopenLogFileLng(pnLngEnv, logFile);

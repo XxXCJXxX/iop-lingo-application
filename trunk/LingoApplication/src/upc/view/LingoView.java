@@ -7,18 +7,11 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JViewport;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-import javax.swing.text.html.HTMLDocument;
-import javax.swing.text.html.HTMLFrameHyperlinkEvent;
+import upc.data.Parameters;
 
 /**
  * The application's main frame.
@@ -29,17 +22,23 @@ public class LingoView extends FrameView {
         super(app);
 
         initComponents();
+        //initProperties();
 
-
-        
         JFrame mainFrame = this.getFrame();
         mainFrame.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         mainFrame.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
 
         //JRootPane root = mainFrame.getRootPane();
-
-
+/*
         // status bar initialization - message timeout, idle icon and busy animation, etc
+        ResourceMap resourceMap = getResourceMap();
+        System.out.println("getResourcesDir " + resourceMap.getResourcesDir());
+        System.out.println("getBundleNames " + resourceMap.getBundleNames());
+        System.out.println("resourceMap2 " + resourceMap.getString("StatusBar.busyAnimationRate"));
+        System.out.println("resourceMap2 " + resourceMap.getString("Application.database.user"));
+        System.out.println("resourceMap2 " + resourceMap.getString("Application.database.path"));
+
+*/
         ResourceMap resourceMap = getResourceMap();
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
         messageTimer = new Timer(messageTimeout, new ActionListener() {
@@ -95,42 +94,7 @@ public class LingoView extends FrameView {
                 }
             }
         });
-/*
-                try {
-            URL url = null;
-            String path = null;
-            
-            try {
-                path = "www.google.com.pe";
-                url = getClass().getResource(path);
-            } catch (Exception e) {
-                System.err.println("Error al abrir " + path);
-                url = null;
-            }
-            
-            if (url != null) {
-                jEditorPane1.setPage(url);
-                jEditorPane1.addHyperlinkListener(createHyperLinkListener());
-                JViewport vp = jScrollPane1.getViewport();
-                vp.add(jEditorPane1);
 
-            } else {
-
-                //jEditorPane1.setPage("http://161.83.80.35:8102/xiris/menu/menu.jsp#anchor_1");
-                jEditorPane1.setPage("http://www.elcomercio.com.pe:80/");
-                jEditorPane1.addHyperlinkListener(createHyperLinkListener());
-                JViewport vp = jScrollPane1.getViewport();
-                vp.add(jEditorPane1);
-
-
-            }
-
-        } catch (MalformedURLException e) {
-            System.out.println("URL incorrecta: " + e);
-        } catch (IOException e) {
-            System.out.println("Error E/S: " + e);
-        }
-*/
     }
 
     @Action
@@ -145,48 +109,26 @@ public class LingoView extends FrameView {
 
     @Action
     public void showInputFrame() {
-        /*
         if (dialogAddData == null) {
-        JFrame mainFrame = LingoApplication.getApplication().getMainFrame();
-        dialogAddData = new DialogAddData(mainFrame);
-        dialogAddData.setLocationRelativeTo(mainFrame);
+            JFrame mainFrame = LingoApplication.getApplication().getMainFrame();
+            dialogAddData = new DialogAddData(mainFrame);
+            dialogAddData.setLocationRelativeTo(mainFrame);
         }
         LingoApplication.getApplication().show(dialogAddData);
 
-         */
+
     }
 
     @Action
     public void showReportFrame() {
-
-        /*if (dialogShowReport == null) {
-        JFrame mainFrame = LingoApplication.getApplication().getMainFrame();
-        dialogShowReport = new DialogShowReport(mainFrame);
-        dialogShowReport.setLocationRelativeTo(mainFrame);
+        if (dialogShowReport == null) {
+            JFrame mainFrame = LingoApplication.getApplication().getMainFrame();
+            dialogShowReport = new DialogShowReport(mainFrame);
+            dialogShowReport.setLocationRelativeTo(mainFrame);
         }
         LingoApplication.getApplication().show(dialogShowReport);
-         */
-    }
-/*
-    public HyperlinkListener createHyperLinkListener() {
-        return new HyperlinkListener() {
 
-            public void hyperlinkUpdate(HyperlinkEvent e) {
-                if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                    if (e instanceof HTMLFrameHyperlinkEvent) {
-                        ((HTMLDocument) jEditorPane1.getDocument()).processHTMLFrameHyperlinkEvent((HTMLFrameHyperlinkEvent) e);
-                    } else {
-                        try {
-                            jEditorPane1.setPage(e.getURL());
-                        } catch (IOException ioe) {
-                            System.out.println("Error E/S: " + ioe);
-                        }
-                    }
-                }
-            }
-        };
     }
-*/
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -198,10 +140,6 @@ public class LingoView extends FrameView {
     private void initComponents() {
 
         mainPanel = new javax.swing.JPanel();
-        jDesktopPane1 = new javax.swing.JDesktopPane();
-        jInternalFrame1 = new javax.swing.JInternalFrame();
-        jInternalFrame2 = new javax.swing.JInternalFrame();
-        jLayeredPane1 = new javax.swing.JLayeredPane();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -217,71 +155,15 @@ public class LingoView extends FrameView {
 
         mainPanel.setName("mainPanel"); // NOI18N
 
-        jDesktopPane1.setName("jDesktopPane1"); // NOI18N
-
-        jInternalFrame1.setIconifiable(true);
-        jInternalFrame1.setMaximizable(true);
-        jInternalFrame1.setName("jInternalFrame1"); // NOI18N
-        jInternalFrame1.setVisible(true);
-
-        javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
-        jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
-        jInternalFrame1Layout.setHorizontalGroup(
-            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 184, Short.MAX_VALUE)
-        );
-        jInternalFrame1Layout.setVerticalGroup(
-            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 134, Short.MAX_VALUE)
-        );
-
-        jInternalFrame1.setBounds(530, 20, 190, 160);
-        jDesktopPane1.add(jInternalFrame1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        jInternalFrame2.setIconifiable(true);
-        jInternalFrame2.setMaximizable(true);
-        jInternalFrame2.setResizable(true);
-        jInternalFrame2.setName("jInternalFrame2"); // NOI18N
-        jInternalFrame2.setVisible(true);
-
-        javax.swing.GroupLayout jInternalFrame2Layout = new javax.swing.GroupLayout(jInternalFrame2.getContentPane());
-        jInternalFrame2.getContentPane().setLayout(jInternalFrame2Layout);
-        jInternalFrame2Layout.setHorizontalGroup(
-            jInternalFrame2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 194, Short.MAX_VALUE)
-        );
-        jInternalFrame2Layout.setVerticalGroup(
-            jInternalFrame2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 134, Short.MAX_VALUE)
-        );
-
-        jInternalFrame2.setBounds(10, 20, 200, 160);
-        jDesktopPane1.add(jInternalFrame2, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        jLayeredPane1.setName("jLayeredPane1"); // NOI18N
-
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                        .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(jDesktopPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 747, Short.MAX_VALUE)
-                        .addGap(21, 21, 21))))
+            .addGap(0, 778, Short.MAX_VALUE)
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(69, Short.MAX_VALUE))
+            .addGap(0, 425, Short.MAX_VALUE)
         );
 
         menuBar.setName("menuBar"); // NOI18N
@@ -356,10 +238,6 @@ public class LingoView extends FrameView {
         setStatusBar(statusPanel);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDesktopPane jDesktopPane1;
-    private javax.swing.JInternalFrame jInternalFrame1;
-    private javax.swing.JInternalFrame jInternalFrame2;
-    private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel mainPanel;

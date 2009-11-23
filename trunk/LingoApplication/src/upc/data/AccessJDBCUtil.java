@@ -3,17 +3,20 @@ package upc.data;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class AccessJDBCUtil {
 
     private static final String accessDBURLPrefix = "jdbc:odbc:Driver={Microsoft Access Driver (*.mdb)};DBQ=";
     private static final String accessDBURLSuffix = ";DriverID=22;READONLY=true}";
 
-    private static org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(upc.view.LingoApplication.class).getContext().getResourceMap();
-    private static String databasePath = resourceMap.getString("Application.database.path");
-
     public static Connection getAccessDBConnection()
             throws SQLException {
+
+        Properties parameters = Parameters.getInstance();
+        String databasePath = parameters.getProperty("database.path");
+        String user = parameters.getProperty("database.user");
+        String pass = parameters.getProperty("database.pass");
 
         System.out.println("databasePath " + databasePath);
 
@@ -23,8 +26,7 @@ public class AccessJDBCUtil {
         urlBuffer.append(accessDBURLPrefix);
         urlBuffer.append(filename);
         urlBuffer.append(accessDBURLSuffix);
-
-        return DriverManager.getConnection(urlBuffer.toString(), "", "");
+        return DriverManager.getConnection(urlBuffer.toString(), user, pass);
     }
 
     static {

@@ -1,36 +1,39 @@
 package upc.data;
 
-import java.util.List;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Properties;
-import org.jdesktop.application.ResourceMap;
-import upc.view.LingoApplication;
 
 /**
  *
  * @author pablo.sierralta
  */
 public final class Parameters {
+
     private static Properties parameter = null;
 
-    public static void fillParameters(List<String> bundleNames) {
-        if (parameter == null) {
-            parameter = new Properties(parameter);
-        }    }
-
-    public  Parameters() {
-        ResourceMap resourceMap = LingoApplication.getInstance(upc.view.LingoApplication.class).getContext().getResourceMap(Parameters.class);
-        System.out.println("getResourcesDir " + resourceMap.getResourcesDir());
-        System.out.println("getBundleNames " + resourceMap.getBundleNames());
-        System.out.println("resourceMap2 " + resourceMap.getString("StatusBar.busyAnimationRate"));
-        System.out.println("resourceMap2 " + resourceMap.getString("Application.database.user"));
-        System.out.println("resourceMap2 " + resourceMap.getString("Application.database.path"));
-        System.out.println("resourceMap2 " + resourceMap.getString("Parameter.database.path"));
+    private Parameters() {
     }
 
-    public static void fillParameters(Properties defaults) {
+    public static Properties fillInstance(Properties defaults) {
+
         if (parameter == null) {
             parameter = new Properties(defaults);
         }
+        return parameter;
+    }
+
+    public static Properties fillInstance(FileInputStream stream) throws IOException {
+        if (parameter == null) {
+            parameter = new Properties();
+            parameter.load(new FileInputStream(new File("base.ini")));
+        }
+        return parameter;
+    }
+
+    public static Properties getInstance() {
+        return parameter;
     }
 
     public static String getProperty(String key) {

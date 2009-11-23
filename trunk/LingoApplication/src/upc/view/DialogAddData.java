@@ -50,6 +50,7 @@ public class DialogAddData extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         btnClose = new javax.swing.JButton();
         btnExecute = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -95,12 +96,17 @@ public class DialogAddData extends javax.swing.JDialog {
         btnExecute.setText(resourceMap.getString("btnExecute.text")); // NOI18N
         btnExecute.setName("btnExecute"); // NOI18N
 
+        jButton1.setAction(actionMap.get("actionMostrar")); // NOI18N
+        jButton1.setName("jButton1"); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(363, 363, 363)
+                .addGap(265, 265, 265)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnExecute, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -109,7 +115,8 @@ public class DialogAddData extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(btnExecute))
+                .addComponent(btnExecute)
+                .addComponent(jButton1))
         );
 
         jLabel1.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
@@ -153,9 +160,19 @@ public class DialogAddData extends javax.swing.JDialog {
 
 
     }
+
+    @Action
+    public void actionMostrar() {
+
+        java.util.List lista = data.getCliente();
+        System.out.println(lista);
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnExecute;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

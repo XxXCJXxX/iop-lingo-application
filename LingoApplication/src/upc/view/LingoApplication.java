@@ -6,10 +6,9 @@ package upc.view;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
+import upc.data.Parameters;
 
 /**
  * The main class of the application.
@@ -32,9 +31,9 @@ public class LingoApplication extends SingleFrameApplication {
      */
     @Override
     protected void startup() {
-        Properties prop = new Properties();
         try {
-            prop.load(new FileInputStream(new File("base.ini")));
+            Parameters.fillInstance(new FileInputStream(new File("base.ini")));
+            System.out.println(Parameters.getInstance());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -11,7 +11,6 @@ import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import upc.data.Parameters;
 
 /**
  * The application's main frame.
@@ -28,17 +27,6 @@ public class LingoView extends FrameView {
         mainFrame.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         mainFrame.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
 
-        //JRootPane root = mainFrame.getRootPane();
-/*
-        // status bar initialization - message timeout, idle icon and busy animation, etc
-        ResourceMap resourceMap = getResourceMap();
-        System.out.println("getResourcesDir " + resourceMap.getResourcesDir());
-        System.out.println("getBundleNames " + resourceMap.getBundleNames());
-        System.out.println("resourceMap2 " + resourceMap.getString("StatusBar.busyAnimationRate"));
-        System.out.println("resourceMap2 " + resourceMap.getString("Application.database.user"));
-        System.out.println("resourceMap2 " + resourceMap.getString("Application.database.path"));
-
-*/
         ResourceMap resourceMap = getResourceMap();
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
         messageTimer = new Timer(messageTimeout, new ActionListener() {
@@ -130,6 +118,17 @@ public class LingoView extends FrameView {
 
     }
 
+    @Action
+    public void showData() {
+        if (dialogShowReport == null) {
+            JFrame mainFrame = LingoApplication.getApplication().getMainFrame();
+            dialogShowReport = new DialogBaseData(mainFrame, true);
+            dialogShowReport.setLocationRelativeTo(mainFrame);
+        }
+        LingoApplication.getApplication().show(dialogShowReport);
+
+    }
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -143,6 +142,7 @@ public class LingoView extends FrameView {
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
@@ -176,6 +176,11 @@ public class LingoView extends FrameView {
         jMenuItem1.setAction(actionMap.get("showInputFrame")); // NOI18N
         jMenuItem1.setName("jmiAddData"); // NOI18N
         fileMenu.add(jMenuItem1);
+
+        jMenuItem3.setAction(actionMap.get("showData")); // NOI18N
+        jMenuItem3.setIcon(resourceMap.getIcon("jMenuItem3.icon")); // NOI18N
+        jMenuItem3.setName("jMenuItem3"); // NOI18N
+        fileMenu.add(jMenuItem3);
 
         jMenuItem2.setAction(actionMap.get("showReportFrame")); // NOI18N
         jMenuItem2.setName("jmiShowReport"); // NOI18N
@@ -240,6 +245,7 @@ public class LingoView extends FrameView {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JProgressBar progressBar;

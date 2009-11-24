@@ -24,7 +24,6 @@ public class ControlData {
         try {
             conn = AccessJDBCUtil.getAccessDBConnection();
             stm = conn.createStatement();
-
             rs = stm.executeQuery("select * from cliente");
 
             lstCliente = new Vector();

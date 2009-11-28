@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package upc.view;
 
 import javax.swing.event.EventListenerList;
@@ -89,6 +85,4 @@ public class TableModelArray extends AbstractTableModel {
     public void setListenerList(EventListenerList listenerList) {
         this.listenerList = listenerList;
     }
-    
-
 }

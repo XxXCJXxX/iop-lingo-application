@@ -5,6 +5,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ *
+ * @author pablo.sierralta
+ */
 public class AccessJDBCUtil {
 
     private static final String accessDBURLPrefix = "jdbc:odbc:Driver={Microsoft Access Driver (*.mdb)};DBQ=";
@@ -17,8 +21,6 @@ public class AccessJDBCUtil {
         String databasePath = parameters.getProperty("database.path");
         String user = parameters.getProperty("database.user");
         String pass = parameters.getProperty("database.pass");
-
-        System.out.println("databasePath " + databasePath);
 
         String filename = databasePath.replace('\\', '/').trim();
 

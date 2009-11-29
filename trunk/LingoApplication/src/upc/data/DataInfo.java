@@ -1,37 +1,17 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package upc.data;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Vector;
 
 /**
  *
- * @author usd32902
+ * @author pablo.sierralta
  */
 public class DataInfo {
 
     private static Field[] fields = null;
-    /*
-    public static Object[] toStrings(String name) {
-    try {
-    List<Object> list = new ArrayList<Object>();
-    fields = Class.forName(name).getFields();
-    for (Field field : fields) {
-    if (field.getModifiers() == Modifier.PRIVATE && field.getModifiers() != Modifier.TRANSIENT) {
-    System.out.println(field.getName());
-    list.add(field.getName());
-    }
-    }
-    return (String[]) list.toArray();
-    } catch (ClassNotFoundException ex) {
-    ex.printStackTrace();
-    return null;
-    }
-     */
 
     public static Vector toStrings(String name) {
         try {
@@ -51,7 +31,7 @@ public class DataInfo {
     }
 
     public static void main(String[] arg) {
-
+        /*
         Vector data = toStrings(Cliente.class.getName());
         System.out.println(Cliente.class.getName() + " - " + data.toString());
 
@@ -59,7 +39,16 @@ public class DataInfo {
 
         Object[] dataaaa = cli.showAttributesValues();
         for (Object object : dataaaa) {
-            System.out.println(object);
+        System.out.println(object);
+        }
+         */
+
+        Runtime run4 = Runtime.getRuntime();
+        try {
+            run4.exec("C:\\Program Files\\Microsoft Office\\Office12\\EXCEL.exe E:\\LingoApplication\\DEAMOD.xls");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            System.out.println("5\n");
         }
     }
 }

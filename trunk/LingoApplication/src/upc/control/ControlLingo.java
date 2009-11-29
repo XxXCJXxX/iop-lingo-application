@@ -1,6 +1,7 @@
 package upc.control;
 
 import com.lindo.Lingd11;
+import upc.data.Parameters;
 
 /**
  *
@@ -15,7 +16,29 @@ public class ControlLingo {
      * @param logFile
      * @return
      */
-    public boolean executeLingoFile(String lingoFile, String resultFile, String logFile) {
+    public boolean showExcelReport(String resultFile) {
+        boolean result = false;
+
+        try {
+            Runtime run = Runtime.getRuntime();
+            run.exec(Parameters.getProperty("application.excel") + " " + resultFile);
+            result = true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result = false;
+        } finally {
+            return result;
+        }
+    }
+
+    /**
+     *
+     * @param lingoFile     E:\\Trabajo IOP\\FINAL.lng
+     * @param resultFile    E:\\Trabajo IOP\\FINAL.xls
+     * @param logFile
+     * @return
+     */
+    public boolean executeLingoFile(String lingoFile, String logFile) {
         try {
             Object pnLngEnv = Lingd11.LScreateEnvLng();
             int nErr = Lingd11.LSopenLogFileLng(pnLngEnv, logFile);
@@ -39,15 +62,11 @@ public class ControlLingo {
                 return false;
             }
             nErr = Lingd11.LSdeleteEnvLng(pnLngEnv);
-
-            Runtime run = Runtime.getRuntime();
-            run.exec(resultFile);
             return true;
 
         } catch (Exception ex) {
             ex.printStackTrace();
             return false;
         }
-
     }
 }

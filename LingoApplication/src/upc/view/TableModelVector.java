@@ -11,7 +11,7 @@ import javax.swing.table.AbstractTableModel;
  */
 public class TableModelVector extends AbstractTableModel {
 
-    private Vector dataVector;
+    private Vector<Vector> dataVector;
     private String[] columnIdentifiers;
     private boolean editable = false;
     private boolean[] colEditables;
@@ -23,10 +23,6 @@ public class TableModelVector extends AbstractTableModel {
     TableModelVector(String[] columnIdentifiers, Vector dataVector) {
         this.columnIdentifiers = columnIdentifiers;
         this.dataVector = dataVector;
-    }
-
-    public Object getValueAt(int row, int col) {
-        return ((Vector) dataVector.get(row)).get(col);
     }
 
     @Override
@@ -48,7 +44,16 @@ public class TableModelVector extends AbstractTableModel {
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        super.setValueAt(aValue, rowIndex, columnIndex);
+        this.dataVector.get(rowIndex).setElementAt(aValue, columnIndex);
+    }
+
+    public String getValueAt(int row, int col) {
+        return String.valueOf(this.dataVector.get(row).get(col));
+    }
+
+    public void addRow(Vector newRow) {
+        this.dataVector.add(newRow);
+        this.fireTableRowsInserted(getRowCount(), getRowCount());
     }
 
     public void setColumnIdentifiers(String[] columnIdentifiers) {
@@ -77,12 +82,12 @@ public class TableModelVector extends AbstractTableModel {
     }
 
     @Override
-    public Class getColumnClass(int c) {
-        return getValueAt(0, c).getClass();
+    public Class getColumnClass(int index) {
+        return this.getValueAt(0, index).getClass();
     }
 
     public int getRowCount() {
-        return dataVector.size();
+        return this.dataVector.size();
     }
 
     public EventListenerList getListenerList() {
@@ -93,8 +98,17 @@ public class TableModelVector extends AbstractTableModel {
         this.listenerList = listenerList;
     }
 
+    public Vector getSelectedRow(int index) {
+        return dataVector.get(index);
+    }
+
     @Override
     public TableModelListener[] getTableModelListeners() {
         return super.getTableModelListeners();
+    }
+
+    public void removeRow(int selectedRow) {
+        dataVector.remove(selectedRow);
+        fireTableRowsDeleted(selectedRow, selectedRow);
     }
 }

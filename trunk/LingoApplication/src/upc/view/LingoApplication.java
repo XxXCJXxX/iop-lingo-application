@@ -5,18 +5,19 @@ package upc.view;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Properties;
+import javax.swing.JFrame;
+import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 import upc.data.Parameters;
 
 /**
  * The main class of the application.
+ * @author pablo.sierralta
  */
 public class LingoApplication extends SingleFrameApplication {
 
     static {
-
         try {
             System.loadLibrary("Lingj11");
 
@@ -24,6 +25,16 @@ public class LingoApplication extends SingleFrameApplication {
             e.printStackTrace();
 
         }
+    }
+    private java.util.Hashtable view;
+    private Object actualView;
+
+    public void setActualView(String type, Object view) {
+        this.view.put(type, view);
+    }
+
+    public void setActualView(Object actualView) {
+        this.actualView = actualView;
     }
 
     /**
@@ -33,12 +44,13 @@ public class LingoApplication extends SingleFrameApplication {
     protected void startup() {
         try {
             Parameters.fillInstance(new FileInputStream(new File("base.ini")));
-            System.out.println(Parameters.getInstance());
+            //System.out.println(Parameters.getInstance());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        show(new LingoView(this));
+        LingoView lingoView = new LingoView(this);
+        show(lingoView.getFrame());
     }
 
     /**
@@ -48,6 +60,12 @@ public class LingoApplication extends SingleFrameApplication {
      */
     @Override
     protected void configureWindow(java.awt.Window root) {
+        System.out.println(this.getClass() + " " + root);
+        System.out.println(this.getClass() + " " + root.getParent());
+        if (root instanceof javax.swing.JFrame) {
+             javax.swing.JFrame mainFrame = (JFrame) root;
+        mainFrame.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        }
     }
 
     /**
@@ -63,5 +81,12 @@ public class LingoApplication extends SingleFrameApplication {
      */
     public static void main(String[] args) {
         launch(LingoApplication.class, args);
+    }
+
+    @Action()
+    public void returnFrame() {
+        if (actualView != null) {
+            ((java.awt.Window) actualView).setVisible(false);
+        }
     }
 }

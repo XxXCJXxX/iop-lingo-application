@@ -1,0 +1,280 @@
+  LINGO/WIN32 11.0.1.2 (26 MAY 09)
+ 
+  LINDO API 5.0.1.399 (May 27 2009 01:07:23)
+ 
+  Copyright (C) 2005-2008 LINDO Systems Inc. Licensed material,
+  all rights reserved. Copying except as authorized in license
+  agreement is prohibited.
+ 
+  License location: C:\LINGO11\lndlng11.lic
+ 
+  Eval Use Only
+ 
+  License expires:  4 Dec 2009
+ 
+  Licensed for commercial use.
+  Branch-and-bound solver enabled.
+  Nonlinear solver enabled.
+  Barrier solver enabled.
+  Global solver enabled.
+ 
+ 
+   Parameter        Old Value     New Value
+    ECHOIN             0             1
+ 
+: TAKE E:\LingoApplication\DEAMOD.lng
+: MODEL:
+? ! Data Envelope Analysis of Decision Maker Efficiency ;
+?  SETS:
+?   DMU/BL HW NT OP YK EL/: ! Six schools;
+?      SCORE; ! Each decision making unit has a;
+?             ! score to be computed;
+?   FACTOR/COST RICH WRIT SCIN/;
+? ! There is a set of factors, input & output;
+?   DXF( DMU, FACTOR):  F; ! F( I, J) = Jth factor of DMU I;
+?  ENDSETS
+?  DATA:
+? ! Inputs are spending/pupil, % not low income;
+? ! Outputs are Writing score and Science score;
+?   NINPUTS = 2;  ! The first NINPUTS factors are inputs;
+? !      The inputs,    the outputs;
+?   F  =  8939  64.3     25.2   223
+?         8625  99       28.2   287
+?         10813 99.6     29.4   317
+?         10638 96       26.4   291
+?         6240  96.2     27.2   295
+?         4719  79.9     25.5   222;
+? @ODBC('DEAMOD', Resultado, SCORE)=SCORE;
+? @ODBC('DEAMOD', Resultado, DMU)=DMU;
+? !@OLE( 'E:\\LingoApplication\\DEAMOD.xls') = SCORE;
+? !@OLE( 'E:\\LingoApplication\\DEAMOD.xls') = DMU;
+?  ENDDATA
+? !----------------------------------------------------------;
+? ! The Model;
+?  SETS:
+?    ! Weights used to compute DMU I's score;
+?    DXFXD(DMU,FACTOR) : W;
+?  ENDSETS
+? ! Try to make everyone's score as high as possible;
+?   MAX = @SUM( DMU: SCORE);
+? ! The LP for each DMU to get its score;
+?   @FOR( DMU( I):
+?    SCORE( I) = @SUM( FACTOR(J)|J #GT# NINPUTS:
+?     F(I, J)* W(I, J));
+? ! Sum of inputs(denominator) = 1;
+?    @SUM( FACTOR( J)| J #LE# NINPUTS:
+?     F( I, J)* W( I, J)) = 1;
+? ! Using DMU I's weights, no DMU can score better than 1;
+?    @FOR( DMU( K):
+?     @SUM( FACTOR( J)| J #GT# NINPUTS: F( K, J) * W( I, J))
+?      <= @SUM( FACTOR( J)| J #LE# NINPUTS:
+?       F( K, J) * W( I, J))
+?    )
+?   );
+? ! The weights must be greater than zero;
+?   @FOR( DXFXD( I, J): @BND( .00001, X, 100000));
+? END
+: LOOK ALL
+ 
+  MODEL:
+    1]! Data Envelope Analysis of Decision Maker Efficiency ;
+    2] SETS:
+    3]  DMU/BL HW NT OP YK EL/: ! Six schools;
+    4]     SCORE; ! Each decision making unit has a;
+    5]            ! score to be computed;
+    6]  FACTOR/COST RICH WRIT SCIN/;
+    7]! There is a set of factors, input & output;
+    8]  DXF( DMU, FACTOR):  F; ! F( I, J) = Jth factor of DMU I;
+    9] ENDSETS
+   10] DATA:
+   11]! Inputs are spending/pupil, % not low income;
+   12]! Outputs are Writing score and Science score;
+   13]  NINPUTS = 2;  ! The first NINPUTS factors are inputs;
+   14]!      The inputs,    the outputs;
+   15]  F  =  8939  64.3     25.2   223
+   16]        8625  99       28.2   287
+   17]        10813 99.6     29.4   317
+   18]        10638 96       26.4   291
+   19]        6240  96.2     27.2   295
+   20]        4719  79.9     25.5   222;
+   21]
+   22]
+   23]@ODBC('DEAMOD', Resultado, SCORE)=SCORE;
+   24]@ODBC('DEAMOD', Resultado, DMU)=DMU;
+   25]!@OLE( 'E:\\LingoApplication\\DEAMOD.xls') = SCORE;
+   26]!@OLE( 'E:\\LingoApplication\\DEAMOD.xls') = DMU;
+   27]
+   28] ENDDATA
+   29]!----------------------------------------------------------;
+   30]! The Model;
+   31] SETS:
+   32]   ! Weights used to compute DMU I's score;
+   33]   DXFXD(DMU,FACTOR) : W;
+   34] ENDSETS
+   35]! Try to make everyone's score as high as possible;
+   36]  MAX = @SUM( DMU: SCORE);
+   37]! The LP for each DMU to get its score;
+   38]  @FOR( DMU( I):
+   39]   SCORE( I) = @SUM( FACTOR(J)|J #GT# NINPUTS:
+   40]    F(I, J)* W(I, J));
+   41]! Sum of inputs(denominator) = 1;
+   42]   @SUM( FACTOR( J)| J #LE# NINPUTS:
+   43]    F( I, J)* W( I, J)) = 1;
+   44]! Using DMU I's weights, no DMU can score better than 1;
+   45]   @FOR( DMU( K):
+   46]    @SUM( FACTOR( J)| J #GT# NINPUTS: F( K, J) * W( I, J))
+   47]     <= @SUM( FACTOR( J)| J #LE# NINPUTS:
+   48]      F( K, J) * W( I, J))
+   49]   )
+   50]  );
+   51]! The weights must be greater than zero;
+   52]  @FOR( DXFXD( I, J): @BND( .00001, X, 100000));
+   53]
+  END
+ 
+: GO
+  Compiling model ...
+  Structural analysis, pass 1 ...
+  Scalarizing model ...
+  Generating nonzero matrix ...
+  Solving ...
+ 
+  Global optimal solution found.
+  Objective value:                              5.787453
+  Infeasibilities:                              0.000000
+  Total solver iterations:                            20
+ 
+  Running output operations ...
+ 
+    Export Summary Report
+    ---------------------
+    Transfer Method:       ODBC BASED
+    ODBC Data Source:      DEAMOD
+    Data Table Name:       Resultado
+    Columns Specified:              1
+        SCORE
+    LINGO Column Length:            6
+    Database Column Length:         6
+ 
+    Export Summary Report
+    ---------------------
+    Transfer Method:       ODBC BASED
+    ODBC Data Source:      DEAMOD
+    Data Table Name:       Resultado
+    Columns Specified:              1
+        DMU
+    LINGO Column Length:            6
+    Database Column Length:         6
+ 
+  Building solution report ...
+ 
+                       Variable           Value        Reduced Cost
+                        NINPUTS        2.000000            0.000000
+                              X       0.1000000E-04        0.000000
+                     SCORE( BL)        1.000000            0.000000
+                     SCORE( HW)       0.9096132            0.000000
+                     SCORE( NT)       0.9635345            0.000000
+                     SCORE( OP)       0.9143053            0.000000
+                     SCORE( YK)        1.000000            0.000000
+                     SCORE( EL)        1.000000            0.000000
+                   F( BL, COST)        8939.000            0.000000
+                   F( BL, RICH)        64.30000            0.000000
+                   F( BL, WRIT)        25.20000            0.000000
+                   F( BL, SCIN)        223.0000            0.000000
+                   F( HW, COST)        8625.000            0.000000
+                   F( HW, RICH)        99.00000            0.000000
+                   F( HW, WRIT)        28.20000            0.000000
+                   F( HW, SCIN)        287.0000            0.000000
+                   F( NT, COST)        10813.00            0.000000
+                   F( NT, RICH)        99.60000            0.000000
+                   F( NT, WRIT)        29.40000            0.000000
+                   F( NT, SCIN)        317.0000            0.000000
+                   F( OP, COST)        10638.00            0.000000
+                   F( OP, RICH)        96.00000            0.000000
+                   F( OP, WRIT)        26.40000            0.000000
+                   F( OP, SCIN)        291.0000            0.000000
+                   F( YK, COST)        6240.000            0.000000
+                   F( YK, RICH)        96.20000            0.000000
+                   F( YK, WRIT)        27.20000            0.000000
+                   F( YK, SCIN)        295.0000            0.000000
+                   F( EL, COST)        4719.000            0.000000
+                   F( EL, RICH)        79.90000            0.000000
+                   F( EL, WRIT)        25.50000            0.000000
+                   F( EL, SCIN)        222.0000            0.000000
+                   W( BL, COST)        0.000000            0.000000
+                   W( BL, RICH)       0.1555210E-01        0.000000
+                   W( BL, WRIT)       0.3968254E-01        0.000000
+                   W( BL, SCIN)        0.000000            0.000000
+                   W( HW, COST)       0.1716388E-04        0.000000
+                   W( HW, RICH)       0.8605672E-02        0.000000
+                   W( HW, WRIT)        0.000000           0.2121430
+                   W( HW, SCIN)       0.3169384E-02        0.000000
+                   W( NT, COST)       0.1646071E-04        0.000000
+                   W( NT, RICH)       0.8253116E-02        0.000000
+                   W( NT, WRIT)        0.000000            3.908281
+                   W( NT, SCIN)       0.3039541E-02        0.000000
+                   W( OP, COST)       0.1701527E-04        0.000000
+                   W( OP, RICH)       0.8531162E-02        0.000000
+                   W( OP, WRIT)        0.000000            4.354592
+                   W( OP, SCIN)       0.3141943E-02        0.000000
+                   W( YK, COST)       0.1835771E-04        0.000000
+                   W( YK, RICH)       0.9204240E-02        0.000000
+                   W( YK, WRIT)        0.000000            0.000000
+                   W( YK, SCIN)       0.3389831E-02        0.000000
+                   W( EL, COST)       0.2119093E-03        0.000000
+                   W( EL, RICH)        0.000000            0.000000
+                   W( EL, WRIT)       0.3921569E-01        0.000000
+                   W( EL, SCIN)        0.000000            0.000000
+ 
+                            Row    Slack or Surplus      Dual Price
+                              1        5.787453            1.000000
+                              2        0.000000            1.000000
+                              3        0.000000            1.000000
+                              4        0.000000            1.000000
+                              5       0.4206102            0.000000
+                              6       0.3823224            0.000000
+                              7       0.4453825            0.000000
+                              8       0.4167469            0.000000
+                              9       0.2307080            0.000000
+                             10        0.000000            1.000000
+                             11        0.000000           0.9096132
+                             12        0.000000           0.4203319
+                             13       0.9038680E-01        0.000000
+                             14       0.3802325E-01        0.000000
+                             15       0.8644313E-01        0.000000
+                             16        0.000000           0.6551389
+                             17       0.6498631E-01        0.000000
+                             18        0.000000            1.000000
+                             19        0.000000           0.9635345
+                             20        0.000000           0.8795257
+                             21       0.8668384E-01        0.000000
+                             22       0.3646551E-01        0.000000
+                             23       0.8290174E-01        0.000000
+                             24        0.000000           0.4097145
+                             25       0.6232396E-01        0.000000
+                             26        0.000000            1.000000
+                             27        0.000000           0.9143053
+                             28        0.000000           0.8458087
+                             29       0.8960421E-01        0.000000
+                             30       0.3769403E-01        0.000000
+                             31       0.8569468E-01        0.000000
+                             32        0.000000           0.3470666
+                             33       0.6442365E-01        0.000000
+                             34        0.000000            1.000000
+                             35        0.000000            1.000000
+                             36        0.000000            0.000000
+                             37       0.9667365E-01        0.000000
+                             38       0.4066795E-01        0.000000
+                             39       0.9245568E-01        0.000000
+                             40        0.000000            1.000000
+                             41       0.6950644E-01        0.000000
+                             42        0.000000            1.000000
+                             43        0.000000            1.000000
+                             44       0.9060220            0.000000
+                             45       0.7218354            0.000000
+                             46        1.138434            0.000000
+                             47        1.218997            0.000000
+                             48       0.2556474            0.000000
+                             49        0.000000            1.000000
+ 
+: QUIT

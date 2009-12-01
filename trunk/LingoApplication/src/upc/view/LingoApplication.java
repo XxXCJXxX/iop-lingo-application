@@ -44,7 +44,6 @@ public class LingoApplication extends SingleFrameApplication {
     protected void startup() {
         try {
             Parameters.fillInstance(new FileInputStream(new File("base.ini")));
-            //System.out.println(Parameters.getInstance());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,8 +59,8 @@ public class LingoApplication extends SingleFrameApplication {
      */
     @Override
     protected void configureWindow(java.awt.Window root) {
-        System.out.println(this.getClass() + " " + root);
-        System.out.println(this.getClass() + " " + root.getParent());
+        //System.out.println(this.getClass() + " " + root);
+        //System.out.println(this.getClass() + " " + root.getParent());
         if (root instanceof javax.swing.JFrame) {
              javax.swing.JFrame mainFrame = (JFrame) root;
         mainFrame.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);

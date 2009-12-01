@@ -8,18 +8,10 @@ public class Unidad {
 
     private String nombreUnidad;
     private String abrevUnidad;
-    private Double inputEmpleado;
-    private Double inputMercados;
-    private Double outputVentasPersonas;
-    private Double outputVentasNegocios;
 
-    public Unidad(String nombreUnidad, String abrevUnidad, Double inputEmpleado, Double inputMercados, Double outputVentasPersonas, Double outputVentasNegocios) {
+    public Unidad(String nombreUnidad, String abrevUnidad) {
         this.nombreUnidad = nombreUnidad;
         this.abrevUnidad = abrevUnidad;
-        this.inputEmpleado = inputEmpleado;
-        this.inputMercados = inputMercados;
-        this.outputVentasPersonas = outputVentasPersonas;
-        this.outputVentasNegocios = outputVentasNegocios;
     }
 
     /**
@@ -49,62 +41,4 @@ public class Unidad {
     public void setAbrevUnidad(String abrevUnidad) {
         this.abrevUnidad = abrevUnidad;
     }
-
-    /**
-     * @return the inputEmpleado
-     */
-    public Double getInputEmpleado() {
-        return inputEmpleado;
-    }
-
-    /**
-     * @param inputEmpleado the inputEmpleado to set
-     */
-    public void setInputEmpleado(Double inputEmpleado) {
-        this.inputEmpleado = inputEmpleado;
-    }
-
-    /**
-     * @return the inputMercados
-     */
-    public Double getInputMercados() {
-        return inputMercados;
-    }
-
-    /**
-     * @param inputMercados the inputMercados to set
-     */
-    public void setInputMercados(Double inputMercados) {
-        this.inputMercados = inputMercados;
-    }
-
-    /**
-     * @return the outputVentasPersonas
-     */
-    public Double getOutputVentasPersonas() {
-        return outputVentasPersonas;
-    }
-
-    /**
-     * @param outputVentasPersonas the outputVentasPersonas to set
-     */
-    public void setOutputVentasPersonas(Double outputVentasPersonas) {
-        this.outputVentasPersonas = outputVentasPersonas;
-    }
-
-    /**
-     * @return the outputVentasNegocios
-     */
-    public Double getOutputVentasNegocios() {
-        return outputVentasNegocios;
-    }
-
-    /**
-     * @param outputVentasNegocios the outputVentasNegocios to set
-     */
-    public void setOutputVentasNegocios(Double outputVentasNegocios) {
-        this.outputVentasNegocios = outputVentasNegocios;
-    }
-
-
 }

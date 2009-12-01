@@ -4,6 +4,7 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import org.jdesktop.application.Action;
 import upc.control.ControlData;
+import upc.control.ParametroUnidad;
 import upc.data.Unidad;
 
 /**
@@ -31,7 +32,7 @@ public class DialogManageUnidad extends javax.swing.JDialog {
     private void loadUnidades() {
         //Vector lstUnidad = controlData.getUnidadArray();
 
-        Vector lstUnidad = controlData.getUnidadTestArray();
+        Vector lstUnidad = controlData.getArregloUnidadParametro();
 
         modelUnidad.setDataVector(lstUnidad);
     }
@@ -143,7 +144,9 @@ public class DialogManageUnidad extends javax.swing.JDialog {
     @Action
     public void actionSaveUnidad() {
         Vector lstTable = modelUnidad.getDataVector();
+        Vector<ParametroUnidad> lstParametroUnidad = new Vector<ParametroUnidad>(lstTable.size());
         Vector<Unidad> lstUnidad = new Vector<Unidad>(lstTable.size());
+
         boolean validate = true;
 
         for (int i = 0; i < lstTable.size(); i++) {
@@ -159,14 +162,18 @@ public class DialogManageUnidad extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, "Los datos de la fila " + i + " deben de estar completos", "Error de datos de Tabla", JOptionPane.ERROR_MESSAGE);
                 validate = false;
             } else {
-                Unidad beanUnidad = new Unidad(nombre, abrev, inputEmpleado, inputMercados, outputVentasPersonas, outputVentasNegocios);
+                ParametroUnidad beanParametroUnidad = new ParametroUnidad(nombre, abrev, inputEmpleado, inputMercados, outputVentasPersonas, outputVentasNegocios);
+                lstParametroUnidad.add(beanParametroUnidad);
+                Unidad beanUnidad = new Unidad(nombre, abrev);
                 lstUnidad.add(beanUnidad);
             }
         }
 
         if (validate == true) {
-            controlData.limpiarUnidadTest();
-            controlData.guardarUnidadTest(lstUnidad);
+            controlData.limpiarParametroUnidad();
+            controlData.guardarParametroUnidad(lstParametroUnidad);
+            controlData.limpiarUnidad();
+            controlData.guardarUnidad(lstUnidad);
             controlData.crearEspacioResultado(modelUnidad.getRowCount());
             JOptionPane.showMessageDialog(this, "Los datos guardados correctamente", "Confirmación de cambios", JOptionPane.ERROR_MESSAGE);
         }

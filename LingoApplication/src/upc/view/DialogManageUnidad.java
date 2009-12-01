@@ -29,7 +29,10 @@ public class DialogManageUnidad extends javax.swing.JDialog {
     }
 
     private void loadUnidades() {
-        Vector lstUnidad = controlData.getUnidadArray();
+        //Vector lstUnidad = controlData.getUnidadArray();
+
+        Vector lstUnidad = controlData.getUnidadTestArray();
+
         modelUnidad.setDataVector(lstUnidad);
     }
 
@@ -162,8 +165,8 @@ public class DialogManageUnidad extends javax.swing.JDialog {
         }
 
         if (validate == true) {
-            controlData.limpiarUnidad();
-            controlData.guardarUnidad(lstUnidad);
+            controlData.limpiarUnidadTest();
+            controlData.guardarUnidadTest(lstUnidad);
             controlData.crearEspacioResultado(modelUnidad.getRowCount());
             JOptionPane.showMessageDialog(this, "Los datos guardados correctamente", "Confirmación de cambios", JOptionPane.ERROR_MESSAGE);
         }

@@ -1,6 +1,5 @@
 package upc.control;
 
-import java.security.KeyStore.Builder;
 import upc.data.Unidad;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -30,11 +29,7 @@ public class ControlData {
             while (rs.next()) {
                 String nombre = rs.getString("nombreUnidad");
                 String abrev = rs.getString("abrevUnidad");
-                Double inputEmpleado = rs.getDouble("inputEmpleado");
-                Double inputMercados = rs.getDouble("inputMercados");
-                Double outputVentasPersonas = rs.getDouble("outputVentasPersonas");
-                Double outputVentasNegocios = rs.getDouble("outputVentasNegocios");
-                lstUnidad.add(new Unidad(nombre, abrev, inputEmpleado, inputMercados, outputVentasPersonas, outputVentasNegocios));
+                lstUnidad.add(new Unidad(nombre, abrev));
             }
 
             return lstUnidad;
@@ -51,24 +46,91 @@ public class ControlData {
         }
     }
 
-    public Vector<Object> getUnidadArray() {
+    public Vector getParametroUnidad() {
+        Vector<ParametroUnidad> lstUnidad = null;
+        Connection conn = null;
+        Statement stm = null;
+        ResultSet rs = null;
+
+        try {
+            conn = AccessJDBCUtil.getAccessDBConnection();
+            stm = conn.createStatement();
+            rs = stm.executeQuery("select nombreUnidad, abrevUnidad, parametro from test");
+            lstUnidad = new Vector<ParametroUnidad>();
+
+            while (rs.next()) {
+                String nombre = rs.getString("nombreUnidad");
+                String abrev = rs.getString("abrevUnidad");
+                Double inputEmpleado = rs.getDouble("parametro");
+                rs.next();
+                Double inputMercados = rs.getDouble("parametro");
+                rs.next();
+                Double outputVentasPersonas = rs.getDouble("parametro");
+                rs.next();
+                Double outputVentasNegocios = rs.getDouble("parametro");
+                lstUnidad.add(new ParametroUnidad(nombre, abrev, inputEmpleado, inputMercados, outputVentasPersonas, outputVentasNegocios));
+            }
+
+            return lstUnidad;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            try {
+                stm.close();
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public Vector<Resultado> getResultado() {
+        Vector<Resultado> lstResultado = null;
+        Connection conn = null;
+        Statement stm = null;
+        ResultSet rs = null;
+
+        try {
+            conn = AccessJDBCUtil.getAccessDBConnection();
+            stm = conn.createStatement();
+            rs = stm.executeQuery("select * from resultado");
+            lstResultado = new Vector<Resultado>();
+
+            while (rs.next()) {
+                String dmu = rs.getString("dmu");
+                Double score = rs.getDouble("score");
+                lstResultado.add(new Resultado(dmu, score));
+            }
+
+            return lstResultado;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            try {
+                stm.close();
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public Vector<Object> getArregloUnidad() {
         Vector<Unidad> data = getUnidad();
         Vector result = new Vector();
         for (int i = 0; i < data.size(); i++) {
             Vector<Object> temp = new Vector<Object>();
             temp.add((data.get(i)).getNombreUnidad());
             temp.add((data.get(i)).getAbrevUnidad());
-            temp.add((data.get(i)).getInputEmpleado());
-            temp.add((data.get(i)).getInputMercados());
-            temp.add((data.get(i)).getOutputVentasPersonas());
-            temp.add((data.get(i)).getOutputVentasNegocios());
             result.add(temp);
         }
         return result;
     }
 
-    public Vector<Object> getUnidadTestArray() {
-        Vector<Unidad> data = getUnidadTest();
+    public Vector<Object> getArregloUnidadParametro() {
+        Vector<ParametroUnidad> data = getParametroUnidad();
         Vector result = new Vector();
         for (int i = 0; i < data.size(); i++) {
             Vector<Object> temp = new Vector<Object>();
@@ -87,26 +149,22 @@ public class ControlData {
         Connection conn = null;
         Statement stm = null;
         try {
+            conn = AccessJDBCUtil.getAccessDBConnection();
+            stm = conn.createStatement();
+            
             for (int i = 0; i < lstUnidad.size(); i++) {
                 Unidad beanUnidad = lstUnidad.get(i);
-                conn = AccessJDBCUtil.getAccessDBConnection();
-                stm = conn.createStatement();
+                
+                
                 StringBuilder builder = new StringBuilder();
-                builder.append("insert into Unidad(nombreUnidad, abrevUnidad, inputEmpleado, inputMercados, outputVentasPersonas, outputVentasNegocios) ");
+                builder.append("insert into Unidad(nombreUnidad, abrevUnidad) ");
                 builder.append("values ('");
                 builder.append(beanUnidad.getNombreUnidad());
                 builder.append("','");
                 builder.append(beanUnidad.getAbrevUnidad());
-                builder.append("',");
-                builder.append(beanUnidad.getInputEmpleado());
-                builder.append(",");
-                builder.append(beanUnidad.getInputMercados());
-                builder.append(",");
-                builder.append(beanUnidad.getOutputVentasPersonas());
-                builder.append(",");
-                builder.append(beanUnidad.getOutputVentasNegocios());
-                builder.append(");");
+                builder.append("');");
 
+                System.out.println(builder.toString());
                 stm.executeUpdate(builder.toString());
             }
         } catch (SQLException ex) {
@@ -124,34 +182,19 @@ public class ControlData {
         return true;
     }
 
-    public boolean guardarUnidad(Unidad beanUnidad) {
+    public boolean limpiarUnidad() {
         Connection conn = null;
         Statement stm = null;
-
         try {
             conn = AccessJDBCUtil.getAccessDBConnection();
             stm = conn.createStatement();
             StringBuilder builder = new StringBuilder();
-            builder.append("insert into Unidad(nombreUnidad, abrevUnidad, inputEmpleado, inputMercados, outputVentasPersonas, outputVentasNegocios) ");
-            builder.append("values ('");
-            builder.append(beanUnidad.getNombreUnidad());
-            builder.append("','");
-            builder.append(beanUnidad.getAbrevUnidad());
-            builder.append("',");
-            builder.append(beanUnidad.getInputEmpleado());
-            builder.append(",");
-            builder.append(beanUnidad.getInputMercados());
-            builder.append(",");
-            builder.append(beanUnidad.getOutputVentasPersonas());
-            builder.append(",");
-            builder.append(beanUnidad.getOutputVentasNegocios());
-            builder.append(")");
+            builder.append("delete from unidad");
             return stm.executeUpdate(builder.toString()) > 0;
 
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
-
         } finally {
             try {
                 stm.close();
@@ -218,30 +261,7 @@ public class ControlData {
         }
     }
 
-    public boolean limpiarUnidad() {
-        Connection conn = null;
-        Statement stm = null;
-        try {
-            conn = AccessJDBCUtil.getAccessDBConnection();
-            stm = conn.createStatement();
-            StringBuilder builder = new StringBuilder();
-            builder.append("delete from unidad");
-            return stm.executeUpdate(builder.toString()) > 0;
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return false;
-        } finally {
-            try {
-                stm.close();
-                conn.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
-    public Vector<Object> getResultadoArray() {
+    public Vector<Object> getArregloResultado() {
         Vector<Resultado> data = getResultado();
         Vector result = new Vector();
         for (int i = 0; i < data.size(); i++) {
@@ -253,88 +273,19 @@ public class ControlData {
         return result;
     }
 
-    public Vector<Resultado> getResultado() {
-        Vector<Resultado> lstResultado = null;
+    public boolean guardarParametroUnidad(Vector<ParametroUnidad> lstUnidad) {
         Connection conn = null;
         Statement stm = null;
-        ResultSet rs = null;
-
         try {
+
             conn = AccessJDBCUtil.getAccessDBConnection();
             stm = conn.createStatement();
-            rs = stm.executeQuery("select * from resultado");
-            lstResultado = new Vector<Resultado>();
 
-            while (rs.next()) {
-                String dmu = rs.getString("dmu");
-                Double score = rs.getDouble("score");
-                lstResultado.add(new Resultado(dmu, score));
-            }
-
-            return lstResultado;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        } finally {
-            try {
-                stm.close();
-                conn.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }
-
-    }
-
-    public Vector getUnidadTest() {
-        Vector<Unidad> lstUnidad = null;
-        Connection conn = null;
-        Statement stm = null;
-        ResultSet rs = null;
-
-        try {
-            conn = AccessJDBCUtil.getAccessDBConnection();
-            stm = conn.createStatement();
-            rs = stm.executeQuery("select nombreUnidad, abrevUnidad, data from test");
-            lstUnidad = new Vector<Unidad>();
-
-            while (rs.next()) {
-                String nombre = rs.getString("nombreUnidad");
-                String abrev = rs.getString("abrevUnidad");
-                Double inputEmpleado = rs.getDouble("data");
-                rs.next();
-                Double inputMercados = rs.getDouble("data");
-                rs.next();
-                Double outputVentasPersonas = rs.getDouble("data");
-                rs.next();
-                Double outputVentasNegocios = rs.getDouble("data");
-                lstUnidad.add(new Unidad(nombre, abrev, inputEmpleado, inputMercados, outputVentasPersonas, outputVentasNegocios));
-            }
-
-            return lstUnidad;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        } finally {
-            try {
-                stm.close();
-                conn.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
-    public boolean guardarUnidadTest(Vector<Unidad> lstUnidad) {
-        Connection conn = null;
-        Statement stm = null;
-        try {
             for (int i = 0; i < lstUnidad.size(); i++) {
-                Unidad beanUnidad = lstUnidad.get(i);
-                conn = AccessJDBCUtil.getAccessDBConnection();
-                stm = conn.createStatement();
+                ParametroUnidad beanUnidad = lstUnidad.get(i);
+                
                 StringBuilder builder = new StringBuilder();
-                builder.append("insert into Test(nombreUnidad, abrevUnidad, data) values ('");
+                builder.append("insert into Test(nombreUnidad, abrevUnidad, parametro) values ('");
                 builder.append(beanUnidad.getNombreUnidad());
                 builder.append("','");
                 builder.append(beanUnidad.getAbrevUnidad());
@@ -344,7 +295,7 @@ public class ControlData {
                 stm.executeUpdate(builder.toString());
 
                 builder = new StringBuilder();
-                builder.append("insert into Test(nombreUnidad, abrevUnidad, data) values ('");
+                builder.append("insert into Test(nombreUnidad, abrevUnidad, parametro) values ('");
                 builder.append(beanUnidad.getNombreUnidad());
                 builder.append("','");
                 builder.append(beanUnidad.getAbrevUnidad());
@@ -354,7 +305,7 @@ public class ControlData {
                 stm.executeUpdate(builder.toString());
 
                 builder = new StringBuilder();
-                builder.append("insert into Test(nombreUnidad, abrevUnidad, data) values ('");
+                builder.append("insert into Test(nombreUnidad, abrevUnidad, parametro) values ('");
                 builder.append(beanUnidad.getNombreUnidad());
                 builder.append("','");
                 builder.append(beanUnidad.getAbrevUnidad());
@@ -364,7 +315,7 @@ public class ControlData {
                 stm.executeUpdate(builder.toString());
 
                 builder = new StringBuilder();
-                builder.append("insert into Test(nombreUnidad, abrevUnidad, data) values ('");
+                builder.append("insert into Test(nombreUnidad, abrevUnidad, parametro) values ('");
                 builder.append(beanUnidad.getNombreUnidad());
                 builder.append("','");
                 builder.append(beanUnidad.getAbrevUnidad());
@@ -387,7 +338,7 @@ public class ControlData {
         return true;
     }
 
-    public boolean limpiarUnidadTest() {
+    public boolean limpiarParametroUnidad() {
         Connection conn = null;
         Statement stm = null;
         try {

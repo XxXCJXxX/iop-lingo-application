@@ -1,8 +1,6 @@
 package upc.view;
 
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jdesktop.application.Action;
 import upc.control.ControlData;
 import upc.control.ControlLingo;
@@ -125,7 +123,7 @@ public class DialogShowReport extends javax.swing.JDialog {
         } catch (InterruptedException ex) {
             System.err.println(ex);
         }
-        Vector resultado = controlData.getResultadoArray();
+        Vector resultado = controlData.getArregloResultado();
         modelResultado.addRow((Vector)resultado.get(0));
         modelResultado.setDataVector(resultado);
         System.out.println("setDataVector");

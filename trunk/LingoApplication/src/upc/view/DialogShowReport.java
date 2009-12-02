@@ -132,7 +132,7 @@ public class DialogShowReport extends javax.swing.JDialog {
     @Action
     public void actionExportUnidadReport() {
         controlLingo.executeLingoFile(
-                Parameters.getProperty("lingoFileExcel.path"),
+                Parameters.getProperty("lingoFile.Excel.path"),
                 Parameters.getProperty("lingoLog.path"));
         
     }
